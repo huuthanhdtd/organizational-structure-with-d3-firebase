@@ -23,6 +23,23 @@ const update = data => {
   const treeData = tree(rootNode);
   // get nodes selection and join data
   const nodes = graph.selectAll(".node").data(treeData.descendants());
+  // get links selection and join data
+  const links = graph.selectAll(".link").data(treeData.links());
+  // enter new links
+  links
+    .enter()
+    .append("path")
+    .attr("class", "link")
+    .attr("fill", "none")
+    .attr("stroke", "#aaa")
+    .attr("stroke-width", 2)
+    .attr(
+      "d",
+      d3
+        .linkVertical()
+        .x(d => d.x)
+        .y(d => d.y)
+    );
   // creat enter node groups
   const enterNodes = nodes
     .enter()
