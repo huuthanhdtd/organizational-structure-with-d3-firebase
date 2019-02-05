@@ -8,6 +8,23 @@ const svg = d3
 
 const graph = svg.append("g").attr("transform", "translate(50, 50)");
 
+// data strat
+const stratify = d3
+  .stratify()
+  .id(d => d.name)
+  .parentId(d => d.parent);
+
+const tree = d3.tree().size([dims.width, dims.height]);
+
+// update function
+const update = data => {
+  // get updated root Node data
+  const rootNode = stratify(data);
+  const treeData = tree(rootNode);
+  // get nodes selection and join data
+  const nodes = graph.selectAll(".node").data(treeData.descendants());
+};
+
 // data and firestore
 let data = [];
 
@@ -30,6 +47,5 @@ db.collection("employees").onSnapshot(res => {
         break;
     }
   });
-  console.log(data);
-  // update(data);
+  update(data);
 });
